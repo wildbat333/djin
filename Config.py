@@ -2,7 +2,8 @@ import pandas as pd
 from openpyxl import Workbook
 
 file_name_input = "smart_ivanovo.xlsx"
-# file_name_input_2 = "sv.xlsx"
+file_name_input_2 = "sv_k.xlsx"
+file_name_input_3 = "sv_e.xlsx"
 file_name_result = "smart_ivanovo_result.xlsx"
 
 d = ['0D1-035', 'Семечки "Джинн"35г.(100)', 100,
@@ -58,21 +59,39 @@ ws = wb.active
 ws1 = wb.create_sheet('Сводка')
 ws2 = wb.create_sheet('Пачки')
 ws3 = wb.create_sheet('Полная')
-# ws4 = wb.create_sheet('СВ')
+ws4 = wb.create_sheet('СВ')
 wb.remove(ws)
 wb.save(file_name_result)
 
 
 df = pd.read_excel(file_name_input, header=None)
-# df_2 = pd.read_excel(file_name_input_2, header=None)
-#
-# print(df_2.loc[12, 32]) ##Итого
-# clmns = list(df_2)
-# print(clmns)
-# for c in range(len(clmns)):
-#     if df_2.loc[12, c] == 'Итого': cL_itogo = c
-# for g, row in df_2.iterrows():
-#     if df_2.loc[g, 0] == 'Долгачева Ирина':
+df_2 = pd.read_excel(file_name_input_2, header=None)
+
+print(df_2.loc[12, 32]) ##Итого
+clmns = list(df_2)
+print(clmns)
+for c in range(len(clmns)):
+    if df_2.loc[12, c] == 'Итого': cL_itogo = c
+for g, row in df_2.iterrows():
+    if df_2.loc[g, 0] == 'Долгачева Ирина': cL_Dolgacheva = g
+    if df_2.loc[g, 0] == 'Дроздова Марина': cL_Drozdova = g
+    if df_2.loc[g, 0] == 'Корсакова Елена': cL_Korsakova = g
+    if df_2.loc[g, 0] == 'Огурова Ольга': cL_Ogurova = g
+    if df_2.loc[g, 0] == 'Федотова Анна': cL_Fedotova = g
+
+
+df_3 = pd.read_excel(file_name_input_3, header=None)
+
+print(df_3.loc[12, 32]) ##Итого
+clmns = list(df_3)
+print(clmns)
+for c in range(len(clmns)):
+    if df_3.loc[12, c] == 'Итого': cL_itogo = c
+for g, row in df_2.iterrows():
+    if df_3.loc[g, 0] == 'Краснова Наталья': cL_Krasnova = g
+    if df_3.loc[g, 0] == 'Мигушова Надежда': cL_Migushova = g
+    if df_3.loc[g, 0] == 'Чепа Елена': cL_Chepa = g
+    if df_3.loc[g, 0] == 'Шутова Ольга': cL_Shutova = g
 
 group_koef = []
 group_koef.extend(d)
@@ -140,6 +159,32 @@ svod_df = pd.crosstab(df[1],
                       aggfunc='sum',
                       normalize=False)
 svod_df = svod_df.round(2)
+for i, row in svod_df.iterrows():
+    if svod_df.loc[i, 1] == 'Долгачева Ирина (ЭК СМАРТ': svod_df.loc[i, 1] = 'Долгачева Ирина'
+    if svod_df.loc[i, 1] == 'Дроздова Марина (ЭК СМАРТ': svod_df.loc[i, 1] = 'Дроздова Марина'
+    if svod_df.loc[i, 1] == 'Корсакова Елена (ЭК СМАРТ': svod_df.loc[i, 1] = 'Корсакова Елена'
+    if svod_df.loc[i, 1] == 'Огурова Ольга (ЭК СМАРТ)': svod_df.loc[i, 1] = 'Огурова Ольгаа'
+    if svod_df.loc[i, 1] == 'Федотова Анна (ЭК СМАРТ)': svod_df.loc[i, 1] = 'Федотова Анна'
+    if svod_df.loc[i, 1] == 'Краснова Наталья (ЭК СМАР': svod_df.loc[i, 1] = 'Краснова Наталья'
+    if svod_df.loc[i, 1] == 'Мигушова Надежда (ЭК СМАР': svod_df.loc[i, 1] = 'Мигушова Надежда'
+    if svod_df.loc[i, 1] == 'Чепа Елена (ЭК СМАРТ)': svod_df.loc[i, 1] = 'Чепа Елена'
+    if svod_df.loc[i, 1] == 'Шутова Ольга (ЭК СМАРТ)': svod_df.loc[i, 1] = 'Шутова Ольга'
+
+clmns_svod = list(svod_df)
+for c in range(len(clmns_svod)):
+    if svod_df.loc[1, c] == '1_Премиум': svod_df.loc[1, c] = 'Премиум'
+    if svod_df.loc[1, c] == '2_Премиум соль': svod_df.loc[1, c] = 'Премиум соль'
+    if svod_df.loc[1, c] == '3_Полосатая': svod_df.loc[1, c] = 'Полосатая'
+    if svod_df.loc[1, c] == '4_Полосатая соль': svod_df.loc[1, c] = 'Полосатая соль'
+    if svod_df.loc[1, c] == '5_Полосатая особо соль': svod_df.loc[1, c] = 'Полосатая особо соль'
+    if svod_df.loc[1, c] == '6_Мастер': svod_df.loc[1, c] = 'Мастер Жарки'
+    if svod_df.loc[1, c] == '7_Тыква': svod_df.loc[1, c] = 'Тыква'
+    if svod_df.loc[1, c] == '8_Караван': svod_df.loc[1, c] = 'Караван'
+    if svod_df.loc[1, c] == '9_Караван стандарт': svod_df.loc[1, c] = 'Караван СТАНДАРТ'
+
+
+for p in range(16):
+    if df_2.loc[cL_Dolgacheva+p, 0] == 'Премиум': raznica = svod_df[- df_2.loc[cL_Dolgacheva+p, cL_itogo]
 
 
 with pd.ExcelWriter(file_name_result, mode="a", engine="openpyxl", if_sheet_exists="replace") as writer:
