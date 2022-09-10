@@ -161,16 +161,16 @@ svod_df = pd.crosstab(df[1],
 svod_df = svod_df.round(2)
 
 for i, row in svod_df.iterrows():
-    if svod_df.loc[i, 0] == 'Долгачева Ирина (ЭК СМАРТ': svod_df.loc[i, 0] = 'Долгачева Ирина'
-    if svod_df.loc[i, 0] == 'Дроздова Марина (ЭК СМАРТ': svod_df.loc[i, 0] = 'Дроздова Марина'
-    if svod_df.loc[i, 0] == 'Корсакова Елена (ЭК СМАРТ': svod_df.loc[i, 0] = 'Корсакова Елена'
-    if svod_df.loc[i, 0] == 'Огурова Ольга (ЭК СМАРТ)': svod_df.loc[i, 0] = 'Огурова Ольгаа'
-    if svod_df.loc[i, 0] == 'Федотова Анна (ЭК СМАРТ)': svod_df.loc[i, 0] = 'Федотова Анна'
-    if svod_df.loc[i, 0] == 'Краснова Наталья (ЭК СМАР': svod_df.loc[i, 0] = 'Краснова Наталья'
-    if svod_df.loc[i, 0] == 'Мигушова Надежда (ЭК СМАР': svod_df.loc[i, 0] = 'Мигушова Надежда'
-    if svod_df.loc[i, 0] == 'Чепа Елена (ЭК СМАРТ)': svod_df.loc[i, 0] = 'Чепа Елена'
-    if svod_df.loc[i, 0] == 'Шутова Ольга (ЭК СМАРТ)': svod_df.loc[i, 0] = 'Шутова Ольга'
-
+    if svod_df.index[i] == 'Долгачева Ирина (ЭК СМАРТ': svod_df.set_index[i] = 'Долгачева Ирина'
+    if svod_df.index[i] == 'Дроздова Марина (ЭК СМАРТ': svod_df.set_index[i] = 'Дроздова Марина'
+    if svod_df.index[i] == 'Корсакова Елена (ЭК СМАРТ': svod_df.set_index[i] = 'Корсакова Елена'
+    if svod_df.index[i] == 'Огурова Ольга (ЭК СМАРТ)': svod_df.set_index[i] = 'Огурова Ольгаа'
+    if svod_df.index[i] == 'Федотова Анна (ЭК СМАРТ)': svod_df.set_index[i] = 'Федотова Анна'
+    if svod_df.index[i] == 'Краснова Наталья (ЭК СМАР': svod_df.set_index[i] = 'Краснова Наталья'
+    if svod_df.index[i] == 'Мигушова Надежда (ЭК СМАР': svod_df.set_index[i] = 'Мигушова Надежда'
+    if svod_df.index[i] == 'Чепа Елена (ЭК СМАРТ)': svod_df.set_index[i] = 'Чепа Елена'
+    if svod_df.index[i] == 'Шутова Ольга (ЭК СМАРТ)': svod_df.set_index[i] = 'Шутова Ольга'
+print(svod_df)
 clmns_svod = list(svod_df)
 for c in range(len(clmns_svod)):
     if svod_df.loc[1, c] == '1_Премиум': svod_df.loc[1, c] = 'Премиум'
