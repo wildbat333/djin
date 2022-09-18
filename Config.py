@@ -73,31 +73,57 @@ wb.save(file_name_result)
 df = pd.read_excel(file_name_input, header=None)
 df_2 = pd.read_excel(file_name_input_2, header=None)
 
+cel_k = []
+cel_e = []
+
 print(df_2.loc[0, 31]) ##Итого
 clmns = list(df_2)
 print(clmns)
 for c in range(len(clmns)):
     if df_2.loc[0, c] == 'Итого': cL_itogo = c
 for g, row in df_2.iterrows():
-    if df_2.loc[g, 0] == 'Долгачева Ирина': cL_Dolgacheva = g
-    if df_2.loc[g, 0] == 'Дроздова Марина': cL_Drozdova = g
-    if df_2.loc[g, 0] == 'Корсакова Елена': cL_Korsakova = g
-    if df_2.loc[g, 0] == 'Огурова Ольга': cL_Ogurova = g
-    if df_2.loc[g, 0] == 'Федотова Анна': cL_Fedotova = g
+    if df_2.loc[g, 0] == 'Долгачева Ирина': cel_k.append(g)
+    if df_2.loc[g, 0] == 'Дроздова Марина': cel_k.append(g)
+    if df_2.loc[g, 0] == 'Корсакова Елена': cel_k.append(g)
+    if df_2.loc[g, 0] == 'Огурова Ольга': cel_k.append(g)
+    if df_2.loc[g, 0] == 'Федотова Анна': cel_k.append(g)
 
+for n in range(len(cel_k)):
+    for i in range(12):
+        if i == 5:
+            continue
+        elif i == 8:
+            continue
+        elif i == 12:
+            break
+        else:
+            cel_k.append(cel_k[n]+(i+1))
+cel_k.sort()
 
 df_3 = pd.read_excel(file_name_input_3, header=None)
 
 print(df_3.loc[0, 31]) ##Итого
 clmns = list(df_3)
 print(clmns)
-for q in range(len(clmns)):
-    if df_3.loc[0, q] == 'Итого': cL_itogo = c
+for c in range(len(clmns)):
+    if df_3.loc[0, c] == 'Итого': cL_itogo = c
 for g, row in df_3.iterrows():
-    if df_3.loc[g, 0] == 'Краснова Наталья': cL_Krasnova = g
-    if df_3.loc[g, 0] == 'Мигушова Надежда': cL_Migushova = g
-    if df_3.loc[g, 0] == 'Чепа Елена': cL_Chepa = g
-    if df_3.loc[g, 0] == 'Шутова Ольга': cL_Shutova = g
+    if df_3.loc[g, 0] == 'Краснова Наталья': cel_e.append(g)
+    if df_3.loc[g, 0] == 'Мигушова Надежда': cel_e.append(g)
+    if df_3.loc[g, 0] == 'Чепа Елена': cel_e.append(g)
+    if df_3.loc[g, 0] == 'Шутова Ольга': cel_e.append(g)
+
+for n in range(len(cel_e)):
+    for i in range(12):
+        if i == 5:
+            continue
+        elif i == 8:
+            continue
+        elif i == 12:
+            break
+        else:
+            cel_e.append(cel_e[n]+(i+1))
+cel_e.sort()
 
 group_koef = []
 group_koef.extend(d)
@@ -178,6 +204,10 @@ svod_df = pd.crosstab(df[1],
                       normalize=False)
 svod_df = svod_df.round(2)
 
+itog = ['Итого']
+for i in cel_k():
+    if
+
 # for i, row in svod_df.iterrows():
 #     if svod_df.index[i] == 'Долгачева Ирина (ЭК СМАРТ': svod_df.set_index[i] = 'Долгачева Ирина'
 #     if svod_df.index[i] == 'Дроздова Марина (ЭК СМАРТ': svod_df.set_index[i] = 'Дроздова Марина'
@@ -189,17 +219,17 @@ svod_df = svod_df.round(2)
 #     if svod_df.index[i] == 'Чепа Елена (ЭК СМАРТ)': svod_df.set_index[i] = 'Чепа Елена'
 #     if svod_df.index[i] == 'Шутова Ольга (ЭК СМАРТ)': svod_df.set_index[i] = 'Шутова Ольга'
 # print(svod_df)
-clmns_svod = list(svod_df)
-for c in range(len(clmns_svod)):
-    if svod_df.loc[1, c] == '1_Премиум': svod_df.loc[1, c] = 'Премиум'
-    if svod_df.loc[1, c] == '2_Премиум соль': svod_df.loc[1, c] = 'Премиум соль'
-    if svod_df.loc[1, c] == '3_Полосатая': svod_df.loc[1, c] = 'Полосатая'
-    if svod_df.loc[1, c] == '4_Полосатая соль': svod_df.loc[1, c] = 'Полосатая соль'
-    if svod_df.loc[1, c] == '5_Полосатая особо соль': svod_df.loc[1, c] = 'Полосатая особо соль'
-    if svod_df.loc[1, c] == '6_Мастер': svod_df.loc[1, c] = 'Мастер Жарки'
-    if svod_df.loc[1, c] == '7_Тыква': svod_df.loc[1, c] = 'Тыква'
-    if svod_df.loc[1, c] == '8_Караван': svod_df.loc[1, c] = 'Караван'
-    if svod_df.loc[1, c] == '9_Караван стандарт': svod_df.loc[1, c] = 'Караван СТАНДАРТ'
+# clmns_svod = list(svod_df)
+# for c in range(len(clmns_svod)):
+#     if svod_df.loc[1, c] == '1_Премиум': svod_df.loc[1, c] = 'Премиум'
+#     if svod_df.loc[1, c] == '2_Премиум соль': svod_df.loc[1, c] = 'Премиум соль'
+#     if svod_df.loc[1, c] == '3_Полосатая': svod_df.loc[1, c] = 'Полосатая'
+#     if svod_df.loc[1, c] == '4_Полосатая соль': svod_df.loc[1, c] = 'Полосатая соль'
+#     if svod_df.loc[1, c] == '5_Полосатая особо соль': svod_df.loc[1, c] = 'Полосатая особо соль'
+#     if svod_df.loc[1, c] == '6_Мастер': svod_df.loc[1, c] = 'Мастер Жарки'
+#     if svod_df.loc[1, c] == '7_Тыква': svod_df.loc[1, c] = 'Тыква'
+#     if svod_df.loc[1, c] == '8_Караван': svod_df.loc[1, c] = 'Караван'
+#     if svod_df.loc[1, c] == '9_Караван стандарт': svod_df.loc[1, c] = 'Караван СТАНДАРТ'
 
 
 # for p in range(16):
