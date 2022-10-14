@@ -11,6 +11,7 @@ ws3 = wb.create_sheet('Сводка')
 ws4 = wb.create_sheet('Пачки')
 ws5 = wb.create_sheet('Полная')
 ws6 = wb.create_sheet('СВ')
+ws7 = wb.create_sheet('Денюшки')
 wb.remove(ws)
 wb.save(Constants.file_name_result)
 
@@ -199,15 +200,33 @@ for i, row in df.iterrows():
         if df.loc[i, 4] == group_koef[f]: #Можно искать по названию в [i, 5], тогда f=1 в начале
             df.loc[i, 8] = group_koef[f+2] # Тогда тут f+1
             df.loc[i, 9] = df.loc[i, 6] / df.loc[i, 8]
-            if df.loc[i, 4] in Constants.d: df.loc[i, 10] = '1_Премиум' #тут везде ставим поиск тогда в [i, 5]
-            if df.loc[i, 4] in Constants.d_s: df.loc[i, 10] = '2_Премиум соль'
-            if df.loc[i, 4] in Constants.v: df.loc[i, 10] = '3_Полосатая'
-            if df.loc[i, 4] in Constants.v_s: df.loc[i, 10] = '4_Полосатая соль'
-            if df.loc[i, 4] in Constants.v_o_s: df.loc[i, 10] = '5_Полосатая особо соль'
-            if df.loc[i, 4] in Constants.m: df.loc[i, 10] = '6_Мастер'
-            if df.loc[i, 4] in Constants.k: df.loc[i, 10] = '8_Караван'
-            if df.loc[i, 4] in Constants.k_s: df.loc[i, 10] = '9_Караван стандарт'
-            if df.loc[i, 4] in Constants.t: df.loc[i, 10] = '7_Тыква'
+            if df.loc[i, 4] in Constants.d:
+                df.loc[i, 10] = '1_Премиум' #тут везде ставим поиск тогда в [i, 5]
+                df.loc[i, 11] = '1_Премиум'
+            if df.loc[i, 4] in Constants.d_s:
+                df.loc[i, 10] = '2_Премиум соль'
+                df.loc[i, 11] = '1_Премиум'
+            if df.loc[i, 4] in Constants.v:
+                df.loc[i, 10] = '3_Полосатая'
+                df.loc[i, 11] = '1_Премиум'
+            if df.loc[i, 4] in Constants.v_s:
+                df.loc[i, 10] = '4_Полосатая соль'
+                df.loc[i, 11] = '1_Премиум'
+            if df.loc[i, 4] in Constants.v_o_s:
+                df.loc[i, 10] = '5_Полосатая особо соль'
+                df.loc[i, 11] = '1_Премиум'
+            if df.loc[i, 4] in Constants.m:
+                df.loc[i, 10] = '6_Мастер'
+                df.loc[i, 11] = '2_Тыква'
+            if df.loc[i, 4] in Constants.k:
+                df.loc[i, 10] = '8_Караван'
+                df.loc[i, 11] = '3_Орехи'
+            if df.loc[i, 4] in Constants.k_s:
+                df.loc[i, 10] = '9_Караван стандарт'
+                df.loc[i, 11] = '3_Орехи'
+            if df.loc[i, 4] in Constants.t:
+                df.loc[i, 10] = '7_Тыква'
+                df.loc[i, 11] = '2_Тыква'
         else:
             f = f+3
 
@@ -229,6 +248,22 @@ svod_df.rename(columns={'1_Премиум': 'Премиум', '2_Премиум 
                         '4_Полосатая соль': 'Полосатая соль', '5_Полосатая особо соль': 'Полосатая особо соль',
                         '7_Тыква': 'Тыква', '8_Караван': 'Караван', '9_Караван стандарт': 'Караван стандарт'},
                inplace=True)
+svod_sort_df = svod_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
+                            'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
+                            'Сотрудники']] #От этой причесанности может сломаться, если не будет какого нибудь индекса
+
+money_df = pd.crosstab(df[1],
+                       df[11],
+                       values=df[7],
+                       aggfunc='sum',
+                       normalize=False)
+money_df = money_df.round(2)
+money_df.index.name = None
+money_df.rename(columns={'1_Премиум': 'Премиум', '2_Тыква': 'Тыква', '3_Орехи': 'Орехи'},
+                inplace=True)
+money_sort_df = money_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
+                              'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
+                              'Сотрудники']]
 
 # print(svod_df.index)
 # print(df_4.index)
@@ -258,10 +293,11 @@ df_7 = pd.DataFrame(df_6.values - df_5.values, df_5.index, columns)
 with pd.ExcelWriter(Constants.file_name_result, mode="a", engine="openpyxl", if_sheet_exists="replace") as writer:
     df_6.to_excel(writer, sheet_name='Сводка 2.0', startrow=0)
     df_7.to_excel(writer, sheet_name='Корректировка')
-    svod_df.to_excel(writer, sheet_name='Сводка', startrow=0)
+    svod_sort_df.to_excel(writer, sheet_name='Сводка', startrow=0)
     prom_df.to_excel(writer, sheet_name='Пачки')
     df.to_excel(writer, sheet_name='Полная')
     df_4.to_excel(writer, sheet_name='СВ')
+    money_sort_df.to_excel(writer, sheet_name='Денюшки')
 
 
 
