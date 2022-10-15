@@ -7,11 +7,12 @@ wb = Workbook()
 ws = wb.active
 ws1 = wb.create_sheet('Сводка 2.0')
 ws2 = wb.create_sheet('Корректировка')
-ws3 = wb.create_sheet('Сводка')
-ws4 = wb.create_sheet('Пачки')
-ws5 = wb.create_sheet('Полная')
-ws6 = wb.create_sheet('СВ')
-ws7 = wb.create_sheet('Денюшки')
+ws3 = wb.create_sheet('Корректировка 2.0')
+ws4 = wb.create_sheet('Сводка')
+ws5 = wb.create_sheet('Пачки')
+ws6 = wb.create_sheet('Полная')
+ws7 = wb.create_sheet('СВ')
+ws8 = wb.create_sheet('Денюшки')
 wb.remove(ws)
 wb.save(Constants.file_name_result)
 
@@ -248,9 +249,9 @@ svod_df.rename(columns={'1_Премиум': 'Премиум', '2_Премиум 
                         '4_Полосатая соль': 'Полосатая соль', '5_Полосатая особо соль': 'Полосатая особо соль',
                         '7_Тыква': 'Тыква', '8_Караван': 'Караван', '9_Караван стандарт': 'Караван стандарт'},
                inplace=True)
-svod_sort_df = svod_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
-                            'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
-                            'Сотрудники']] #От этой причесанности может сломаться, если не будет какого нибудь индекса
+# svod_sort_df = svod_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
+#                             'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
+#                             'Сотрудники']] #От этой причесанности может сломаться, если не будет какого нибудь индекса
 
 money_df = pd.crosstab(df[1],
                        df[11],
@@ -261,14 +262,14 @@ money_df = money_df.round(2)
 money_df.index.name = None
 money_df.rename(columns={'1_Премиум': 'Премиум', '2_Тыква': 'Тыква', '3_Орехи': 'Орехи'},
                 inplace=True)
-money_sort_df = money_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
-                              'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
-                              'Сотрудники']]
+# money_sort_df = money_df.loc[['Доставка ОПТ', 'Дроздова Марина', 'Корсакова Елена', 'Огурова Ольга', 'Федотова Анна',
+#                               'Краснова Наталья', 'Мигушова Надежда', 'Чепа Елена', 'Шутова Ольга', 'Редьков Алексей',
+#                               'Сотрудники']] #От этой причесанности может сломаться, если не будет какого нибудь индекса
 
 # print(svod_df.index)
 # print(df_4.index)
 
-
+#Делаем СВ без не продаваемых продуктов
 del tp0[5], tp0[-1] #удаляем Мастер Жарки и Арахис Джинн из списка
 del tp1[5], tp1[-1]
 del tp2[5], tp2[-1]
@@ -283,21 +284,23 @@ df_5 = pd.DataFrame([tp0, tp1, tp2, tp3, tp4, tp5, tp6, tp7],
                     columns=columns,
                     index=Constants.tp)
 
-df_6 = svod_df.loc[Constants.tp]
+#df_6 = svod_df.loc[Constants.tp]
 #print(df_6)
-df_7 = pd.DataFrame(df_6.values - df_5.values, df_5.index, columns)
+
+#Делаем таблицу Корректировки
+df_7 = pd.DataFrame(svod_df.loc[Constants.tp].values - df_5.values, df_5.index, columns)
 # print(df_7)
 
 
-
 with pd.ExcelWriter(Constants.file_name_result, mode="a", engine="openpyxl", if_sheet_exists="replace") as writer:
-    df_6.to_excel(writer, sheet_name='Сводка 2.0', startrow=0)
+    svod_df.loc[Constants.tp].to_excel(writer, sheet_name='Сводка 2.0', startrow=0)
     df_7.to_excel(writer, sheet_name='Корректировка')
-    svod_sort_df.to_excel(writer, sheet_name='Сводка', startrow=0)
+    df_7.T.to_excel(writer, sheet_name='Корректировка 2.0')
+    svod_df.to_excel(writer, sheet_name='Сводка', startrow=0)
     prom_df.to_excel(writer, sheet_name='Пачки')
     df.to_excel(writer, sheet_name='Полная')
     df_4.to_excel(writer, sheet_name='СВ')
-    money_sort_df.to_excel(writer, sheet_name='Денюшки')
+    money_df.to_excel(writer, sheet_name='Денюшки')
 
 
 
